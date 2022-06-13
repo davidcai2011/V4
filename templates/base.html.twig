@@ -1,19 +1,140 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
-        {# Run `composer require symfony/webpack-encore-bundle` to start using Symfony UX #}
-        {% block stylesheets %}
-            {{ encore_entry_link_tags('app') }}
-        {% endblock %}
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
-        {% block javascripts %}
-            {{ encore_entry_script_tags('app') }}
-        {% endblock %}
-    </head>
-    <body>
-        {% block body %}{% endblock %}
-    </body>
+    <title>{% block title %}XBase{% endblock %}</title>
+
+    {% block stylesheets %}
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.0/font/bootstrap-icons.css">
+        {#        <link href="{{ asset('build/layout.css') }}" rel="stylesheet" />#}
+
+        {{ encore_entry_link_tags('xbase_react') }}
+    {% endblock %}
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/es6-promise/4.0.5/es6-promise.auto.min.js"></script>
+    {#    <script src="{{ asset('build/manifest.js') }}"></script>#}
+    {#    <script src="{{ asset('build/layout.js') }}"></script>#}
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+    <style>
+        body {
+            font-family: Verdana;
+        }
+    </style>
+</head>
+<body >
+<div class="container-fluid">
+    <div class="row flex-nowrap">
+        <div class="col-auto col-md-2 col-xl-2 px-sm-2 px-0 text-white" id="nav" style="background-color: cornflowerblue;">
+            <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
+                <a href="/" class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+                    <span class="fs-5 d-none d-sm-inline">XBase</span>
+                </a>
+                <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start text-white" id="menu">
+                    <li class="nav-item">
+                        <a href="#" class="nav-link align-middle px-0 text-white">
+                            <i class="fs-4 bi-house"></i> <span class="ms-1 d-none d-sm-inline">Home</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link align-middle px-0 text-white">
+                            <i class="fs-4 bi-speedometer2"></i> <span class="ms-1 d-none d-sm-inline">Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/" class="nav-link align-middle px-0 text-white">
+                            <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Customer</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/product" class="nav-link align-middle px-0 text-white">
+                            <i class="fs-4 bi-box"></i> <span class="ms-1 d-none d-sm-inline">Product</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link align-middle px-0 text-white">
+                            <i class="fs-4 bi-cart"></i> <span class="ms-1 d-none d-sm-inline">Order</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="/invoice"  class="nav-link px-0 align-middle">
+                            <i class="fs-4 bi-receipt" style="color: white;"></i> <span class="ms-1 d-none d-sm-inline text-white" >Rechnungen</span> </a>
+                        <ul class=" nav flex-column ms-1" id="submenu3" data-bs-parent="#menu">
+                            <li class="w-100">
+                                <a href="#" class="nav-link px-4"> <span class="d-none d-sm-inline text-white">Rechnungen</span></a>
+                            </li>
+                            <li>
+                                <a href="#" class="nav-link px-4"> <span class="d-none d-sm-inline text-white">Mahnungen</span></a>
+                            </li>
+                            <li>
+                                <a href="#" class="nav-link px-4"> <span class="d-none d-sm-inline text-white">Gutschriften</span></a>
+                            </li>
+
+                        </ul>
+                    </li>
+
+                </ul>
+                {#                    <li>#}
+                {#                        <a href="/" class="nav-link px-0 align-middle">#}
+                {#                            <i class="fs-4 bi-table"></i> <span class="ms-1 d-none d-sm-inline">Orders</span></a>#}
+                {#                    </li>#}
+                {#                    <li>#}
+                {#                        <a href="#submenu2" data-bs-toggle="collapse" class="nav-link px-0 align-middle ">#}
+                {#                            <i class="fs-4 bi-bootstrap"></i> <span class="ms-1 d-none d-sm-inline">Bootstrap</span></a>#}
+                {#                        <ul class="collapse nav flex-column ms-1" id="submenu2" data-bs-parent="#menu">#}
+                {#                            <li class="w-100">#}
+                {#                                <a href="#" class="nav-link px-0"> <span class="d-none d-sm-inline">Item</span> 1</a>#}
+                {#                            </li>#}
+                {#                            <li>#}
+                {#                                <a href="#" class="nav-link px-0"> <span class="d-none d-sm-inline">Item</span> 2</a>#}
+                {#                            </li>#}
+                {#                        </ul>#}
+                {#                    </li>#}
+
+                {#                </ul>#}
+                {#                <hr>#}
+                <div class="dropdown pb-4">
+                    <a class="nav-link text-black-50" href="{{ path('login') }}">Log In</a>
+                    <a href="#" class="btn btn-dark">Sign up</a>
+                    <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+                        <img src="{{ asset('build/images/David.png') }}" alt="Login User" width="30" height="30" class="rounded-circle">
+                        <span class="d-none d-sm-inline mx-1">David</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
+
+                        <li><a class="dropdown-item" href="#">Settings</a></li>
+                        <li><a class="dropdown-item" href="#">Profile</a></li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li><a class="dropdown-item" href="#">Sign out</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-auto col py-3" id="content">
+
+            {% block body %}{% endblock %}
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+{% block javascripts %}
+
+    {{ encore_entry_script_tags('xbase_react') }}
+{% endblock %}
+
+</body>
 </html>
