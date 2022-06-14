@@ -23,6 +23,8 @@ Encore
     // .addEntry('app', './assets/app.js')
     .addEntry('xbase_react', './assets/js/xbase_react.js')
 
+    .addStyleEntry('admin', './assets/styles/admin.css')
+
     // enables the Symfony UX Stimulus bridge (used in assets/bootstrap.js)
     .enableStimulusBridge('./assets/controllers.json')
 

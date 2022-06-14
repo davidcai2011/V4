@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDom from 'react-dom';
 import { createRoot } from 'react-dom/client';
 import CustomerApp from './XBase/CustomerApp';
-// import TestApp from "./XBase/TestApp";
+// import '../../assets/styles/app.css';
 
 // const el = <h2>Lift Stuff! <span>️</span></h2>;
 // console.log(el);
