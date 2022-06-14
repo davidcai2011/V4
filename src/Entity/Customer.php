@@ -2,11 +2,20 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
+
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\BooleanFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+
 use App\Repository\CustomerRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\SerializedName;
 
 #[ORM\Entity(repositoryClass: CustomerRepository::class)]
+#[ApiFilter(SearchFilter::class, properties: [ 'Company' => 'partial'])]
+
 #[ApiResource]
 class Customer
 {
@@ -16,9 +25,11 @@ class Customer
     private $id;
 
     #[ORM\Column(type: 'string', length: 50)]
+    #[ApiFilter(SearchFilter::class, strategy: 'partial')]
     private $CustomerName;
 
     #[ORM\Column(type: 'string', length: 100, nullable: true)]
+    #[ApiFilter(SearchFilter::class, strategy: 'partial')]
     private $Company;
 
     public function getId(): ?int

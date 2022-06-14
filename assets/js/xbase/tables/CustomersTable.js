@@ -21,8 +21,8 @@ const CustomersTable = (props) => {
                             <td>{customerName}</td>
                             <td>{company}</td>
                             <td>
-                                {/*<button onClick={() => props.deleteCustomer(id)}>Delete</button>*/}
-                                {/*<button onClick={() => props.editCustomer(id, customer)}>Edit</button>*/}
+                                <button onClick={() => props.deleteCustomer(id)}>Delete</button>
+                                <button onClick={() => props.editCustomer(id, customer)}>Edit</button>
                             </td>
                         </tr>
                     )

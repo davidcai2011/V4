@@ -3,7 +3,8 @@ import CustomersTable from './tables/CustomersTable';
 import Pagination from "@material-ui/lab/Pagination";
 import EditCustomerForm from "./forms/EditCustomerForm";
 import AddCustomerForm from "./forms/AddCustomerForm";
-
+import axios from 'axios';
+import Swal from 'sweetalert2'
 
 const CustomerApp = () => {
     const [searchCustomer, setSearchCustomer] = useState("");
@@ -25,6 +26,10 @@ const CustomerApp = () => {
     const initialCustomer = { id: null, customerName: "", company: "" };
     const [currentCustomer, setCurrentCustomer] = useState(initialCustomer);
 
+    const editCustomer = (id, customer) => {
+        setEditing(true);
+        setCurrentCustomer(customer);
+    };
     const handlePageChange = (event, value) => {
         setPage(value);
 
@@ -34,6 +39,47 @@ const CustomerApp = () => {
         setPageSize(event.target.value);
         //   setPage(1);
     };
+
+    const getRequestParamsString = (searchCustomer, page, pageSize) => {
+        let paramsString = '?';
+        if (searchCustomer) {
+            paramsString=paramsString+'CustomerName=' + searchCustomer;
+        }
+        if (page) {
+            paramsString=paramsString+'&page='+page;
+        }
+        if (pageSize) {
+            paramsString=paramsString+'&itemsPerPage='+pageSize;
+        }
+        return paramsString;
+    };
+
+    useEffect(() => {
+        fetchCustomerList()
+    }, [pagecount, page, pageSize])
+
+    const fetchCustomerList = async () => {
+
+
+        const paramsString=getRequestParamsString(searchCustomer, page, pageSize);
+        try {
+            console.log(paramsString);
+            setLoading(true);
+
+            await axios.get( '/api/customers'+paramsString)
+
+                .then(function (response) {
+                    setPagecount(Math.ceil(response.data['hydra:totalItems']/pageSize));
+                    setCustomers(response.data['hydra:member']);
+                    setLoading(false);
+                })
+        }
+        catch (err) {
+            console.warn("Something went wrong fetching the API...", err);
+            setLoading(false);
+        }
+    }
+
     const addCustomer = customer => {
 
         setCustomers([...customers, customer]);
@@ -47,13 +93,13 @@ const CustomerApp = () => {
             body: JSON.stringify(customer)
         };
 
-        // console.log('json'+JSON.stringify(customer));
-        // fetch('http://localhost:8099/api/customers', requestOptions)
-        //     .then(response => response.json())
-        //     .then(res => console.log(res));
-        //
-        //
-        // fetchCustomerList();
+        console.log('json'+JSON.stringify(customer));
+        fetch('/api/customers', requestOptions)
+            .then(response => response.json())
+            .then(res => console.log(res));
+
+
+        fetchCustomerList();
 
         // console.log(customer);
         // axios.post('http://localhost:8090/api/customers', requestOptions)
@@ -78,7 +124,38 @@ const CustomerApp = () => {
         //     })
 
     }
-
+    const deleteCustomer = (id) => {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                axios.delete(`/api/customers/${id}`)
+                    .then(function (response) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Customer deleted successfully!',
+                            showConfirmButton: false,
+                            timer: 1500
+                        })
+                        fetchCustomerList()
+                    })
+                    .catch(function (error) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: {error},
+                            showConfirmButton: false,
+                            timer: 1500
+                        })
+                    });
+            }
+        })
+    }
     const updateCustomer = (newCustomer) => {
         setCustomers(
             customers.map((customer) => (customer.id === currentCustomer.id ? newCustomer : customer))
@@ -87,19 +164,20 @@ const CustomerApp = () => {
 
         setEditing(false);
 
-        // updateCustomer(newUser.id, newUser);
+
         const id=newCustomer.id;
-        //   delete newCustomer.id;
+
         const requestOptions = {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(newCustomer)
         };
 
-        // fetch(`/customers/${id}`, requestOptions)
-        //     .then(response => response.json())
-        //     .then(res => console.log(res));
+        fetch(`/api/customers/${id}`, requestOptions)
+            .then(response => response.json())
+            .then(res => console.log(res));
     };
+
 
     return (
         <div className="container">
@@ -117,7 +195,7 @@ const CustomerApp = () => {
                     <button
                         className="btn btn-outline-secondary"
                         type="button"
-                        // onClick={fetchCustomerList}
+                        onClick={fetchCustomerList}
                     >
                         Search
                     </button>
@@ -137,8 +215,8 @@ const CustomerApp = () => {
 
                                 <CustomersTable
                                     customers={customers}
-                                    // deleteCustomer={deleteCustomer}
-                                    // editCustomer={editCustomer}
+                                    deleteCustomer={deleteCustomer}
+                                    editCustomer={editCustomer}
                                 />
 
                             </div>
