@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\ProductRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
@@ -23,6 +25,14 @@ class Product
 
     #[ORM\Column(type: 'integer', nullable: true)]
     private $DefaultPrice;
+
+    #[ORM\OneToMany(mappedBy: 'Product', targetEntity: InvoiceItem::class)]
+    private $Invoice;
+
+    public function __construct()
+    {
+        $this->Invoice = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -61,6 +71,36 @@ class Product
     public function setDefaultPrice(?int $DefaultPrice): self
     {
         $this->DefaultPrice = $DefaultPrice;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, InvoiceItem>
+     */
+    public function getInvoice(): Collection
+    {
+        return $this->Invoice;
+    }
+
+    public function addInvoice(InvoiceItem $invoice): self
+    {
+        if (!$this->Invoice->contains($invoice)) {
+            $this->Invoice[] = $invoice;
+            $invoice->setProduct($this);
+        }
+
+        return $this;
+    }
+
+    public function removeInvoice(InvoiceItem $invoice): self
+    {
+        if ($this->Invoice->removeElement($invoice)) {
+            // set the owning side to null (unless already changed)
+            if ($invoice->getProduct() === $this) {
+                $invoice->setProduct(null);
+            }
+        }
 
         return $this;
     }

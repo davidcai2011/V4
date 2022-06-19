@@ -20,7 +20,8 @@ Encore
      * Each entry will result in one JavaScript file (e.g. app.js)
      * and one CSS file (e.g. app.css) if your JavaScript imports CSS.
      */
-    // .addEntry('app', './assets/app.js')
+    .addEntry('app', './assets/app.js')
+    .addEntry('searchBox', './assets/js/searchBox.js')
     .addEntry('xbase_react', './assets/js/xbase_react.js')
 
     .addStyleEntry('admin', './assets/styles/admin.css')

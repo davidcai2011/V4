@@ -13,11 +13,6 @@ const CustomerApp = () => {
     const [pageSize, setPageSize] = useState(20);
     const pageSizes = [4, 8, 12];
 
-    const onChangeSearchCustomer = (e) => {
-        const searchCustomer = e.target.value;
-        setSearchCustomer(searchCustomer);
-
-    };
 
     const [loading, setLoading] = useState(false);
     const [customers, setCustomers] = useState([]);
@@ -26,6 +21,11 @@ const CustomerApp = () => {
     const initialCustomer = { id: null, customerName: "", company: "" };
     const [currentCustomer, setCurrentCustomer] = useState(initialCustomer);
 
+    const onChangeSearchCustomer = (e) => {
+        const searchCustomer = e.target.value;
+        setSearchCustomer(searchCustomer);
+
+    };
     const editCustomer = (id, customer) => {
         setEditing(true);
         setCurrentCustomer(customer);
@@ -93,7 +93,8 @@ const CustomerApp = () => {
             body: JSON.stringify(customer)
         };
 
-        console.log('json'+JSON.stringify(customer));
+
+       console.log('json'+JSON.stringify(customer));
         fetch('/api/customers', requestOptions)
             .then(response => response.json())
             .then(res => console.log(res));
